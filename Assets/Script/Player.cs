@@ -18,24 +18,16 @@ public class Player : MonoBehaviour {
 
 		#region shooting
 		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-			GameObject o = Instantiate (bullet, this.rb.transform.position, Quaternion.identity) as GameObject;
-			o.GetComponent<Projectile>().direction = new Vector3(-1, 0, 0);
-			o.GetComponent<Projectile>().speed = this.bulletSpeed;
+			CreateBullet (new Vector3(-1, 0, 0));
 		}
 		else if (Input.GetKeyDown (KeyCode.RightArrow)) {
-			GameObject o = Instantiate (bullet, this.rb.transform.position, Quaternion.identity) as GameObject;
-			o.GetComponent<Projectile>().direction = new Vector3(1, 0, 0);
-			o.GetComponent<Projectile>().speed = this.bulletSpeed;
+			CreateBullet (new Vector3(1, 0, 0));
 		}
 		else if (Input.GetKeyDown (KeyCode.UpArrow)) {
-			GameObject o = Instantiate (bullet, this.rb.transform.position, Quaternion.identity) as GameObject;
-			o.GetComponent<Projectile>().direction = new Vector3(0, 1, 0);
-			o.GetComponent<Projectile>().speed = this.bulletSpeed;
+			CreateBullet (new Vector3(0, 1, 0));
 		}
 		else if (Input.GetKeyDown (KeyCode.DownArrow)) {
-			GameObject o = Instantiate (bullet, this.rb.transform.position, Quaternion.identity) as GameObject;
-			o.GetComponent<Projectile>().direction = new Vector3(0, -1, 0);
-			o.GetComponent<Projectile>().speed = this.bulletSpeed;
+			CreateBullet (new Vector3(0, -1, 0));
 		}
 		#endregion
 
@@ -75,15 +67,25 @@ public class Player : MonoBehaviour {
 
 	void OnTriggerEnter(Collider c) {
 		string colTag = c.gameObject.tag;
-		Debug.Log ("I HIT THE THING");
+		Debug.Log ("Bullet speed up");
 
 		if (colTag == "pwp_speed_up") {
-			this.bulletSpeed += 100;
+			this.bulletSpeed += 4;
 			Destroy (c.gameObject);
 		}
 	}
 
 	void OnCollisionEnter(Collision c) {
-		Debug.Log ("Collide?");
+			
+	}
+
+	private void CreateBullet(Vector3 direction) {
+		GameObject o = Instantiate (bullet, this.rb.transform.position, Quaternion.identity) as GameObject;
+		o.GetComponent<Projectile>().direction = direction;
+		o.GetComponent<Projectile>().speed = this.bulletSpeed;
+		Physics.IgnoreCollision (o.GetComponent<Collider>(), this.GetComponent<Collider>());
 	}
 }
+
+
+
